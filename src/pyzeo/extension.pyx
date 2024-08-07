@@ -9,6 +9,10 @@ from libcpp.vector cimport vector
 from cython.operator cimport dereference as deref, preincrement as inc
 cimport pyzeo.extension
 
+# unicode global variable does not exist in python3 anymore
+if sys.version_info[0] >= 3:
+    unicode = str
+
 #=============================================================================
 # geometry
 cdef class Xyz:
