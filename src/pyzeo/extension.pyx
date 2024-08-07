@@ -410,7 +410,7 @@ cdef class AtomNetwork:
             rad_file = (<unicode>rad_file).encode('utf8')
         if isinstance(filename, unicode):
             filename = (<unicode>filename).encode('utf8')
-        print(type(rad_file))
+
         cdef char* c_rad_file = rad_file
         if rad_flag:
             if not rad_file:
