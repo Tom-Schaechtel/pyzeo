@@ -9,10 +9,6 @@ from libcpp.vector cimport vector
 from cython.operator cimport dereference as deref, preincrement as inc
 cimport pyzeo.extension
 
-# unicode global variable does not exist in python3 anymore
-if sys.version_info[0] >= 3:
-    unicode = str
-
 #=============================================================================
 # geometry
 cdef class Xyz:
@@ -392,7 +388,7 @@ cdef class AtomNetwork:
     #            rel_point.vals[2])
 
     @classmethod
-    def read_from_CIF(cls, filename, rad_flag=True, rad_file=None):
+    def read_from_CIF(cls, filename, rad_flag=True, rad_file=""):
         """
         Static method to create and populate the AtomNetwork with 
         atom data from a CIF file.
@@ -431,7 +427,7 @@ cdef class AtomNetwork:
         return atmnet
 
     @classmethod
-    def read_from_ARC(cls, filename, rad_flag=True, rad_file=None):
+    def read_from_ARC(cls, filename, rad_flag=True, rad_file=""):
         """
         Static method to create and populate the AtomNetwork with 
         atom data from a ARC file.
@@ -470,7 +466,7 @@ cdef class AtomNetwork:
         return atmnet
 
     @classmethod
-    def read_from_CSSR(cls, filename, rad_flag=True, rad_file=None):
+    def read_from_CSSR(cls, filename, rad_flag=True, rad_file=""):
         """
         Static method to create and populate the AtomNetwork with 
         atom data from a CSSR file.
@@ -510,7 +506,7 @@ cdef class AtomNetwork:
         return atmnet
 
     @classmethod
-    def read_from_V1(cls, filename, rad_flag=True, rad_file=None):
+    def read_from_V1(cls, filename, rad_flag=True, rad_file=""):
         """
         Static method to create and populate the AtomNetwork with 
         atom data from a V1 file.
