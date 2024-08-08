@@ -638,6 +638,12 @@ cdef class AtomNetwork:
         if not writeToMOPAC(c_filename, self.thisptr, supercell_flag):
              raise IOError
 
+    def loadMass(self):
+        """
+        Load atomic masses from masses table and assign to AtomNetwork
+        """
+        zeo_loadMass(True, self.thisptr)
+    
     def calculate_free_sphere_parameters(self, filename):
         """
         Computes the diameters of the largest included sphere, free sphere 
