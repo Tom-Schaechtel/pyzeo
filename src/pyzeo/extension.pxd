@@ -285,6 +285,9 @@ cdef extern from "../voronoicell.h":
 
     cdef cppclass BASIC_VCELL:
         BASIC_VCELL() except +
+        int getNumNodes()
+        CPoint getNodeCoord(int index)
+        int getNodeID(int index)
 
 
 cdef class VorFace:
