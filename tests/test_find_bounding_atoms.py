@@ -46,8 +46,8 @@ def test_find_bounding_atoms():
           
         # Validate results  
         assert len(atom_ids) > 0, f"Channel {i} should have at least one bounding atom"  
-        assert all(0 <= atom_id < atmnet.numAtoms for atom_id in atom_ids), \
-            f"All atom IDs should be valid indices (0 to {atmnet.numAtoms-1})"  
+        assert all(0 <= atom_id < atmnet.no_atoms for atom_id in atom_ids), \
+            f"All atom IDs should be valid indices (0 to {atmnet.no_atoms-1})"  
           
         # Print atom details for the first few bounding atoms  
         for atom_id in atom_ids[:3]:  # Show first 3 atoms  
