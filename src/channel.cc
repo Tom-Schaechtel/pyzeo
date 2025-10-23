@@ -804,6 +804,9 @@ CHANNEL::CHANNEL(PORE *p){
     basis[0][0]=p->basis[0][0];basis[0][1]=p->basis[0][1];basis[0][2]=p->basis[0][2];
     basis[1][0]=p->basis[1][0];basis[1][1]=p->basis[1][1];basis[1][2]=p->basis[1][2];
     basis[2][0]=p->basis[2][0];basis[2][1]=p->basis[2][1];basis[2][2]=p->basis[2][2];
+
+	idMappings = p->idMappings;  
+    reverseIDMappings = p->reverseIDMappings;
 }
 
 
