@@ -82,9 +82,9 @@ cdef extern from "../channel.h":
         void findBoundingAtoms(ATOM_NETWORK*, vector[BASIC_VCELL]&, vector[int]&)
 
 cdef extern from "../channel.h" namespace "CHANNEL":
-    cdef c_findChannelsInDijkstraNet "findChannels"(DIJKSTRA_NETWORK*, 
+    cdef c_findChannelsInDijkstraNet "CHANNEL::findChannels"(DIJKSTRA_NETWORK*, 
             vector[bint] *, vector[CHANNEL] *)
-    cdef c_findChannelsInVorNet "findChannels"(VORONOI_NETWORK*, double, 
+    cdef c_findChannelsInVorNet "CHANNEL::findChannels"(VORONOI_NETWORK*, double, 
             vector[bint] *, vector[CHANNEL] *)
 
 cdef class Channel:
