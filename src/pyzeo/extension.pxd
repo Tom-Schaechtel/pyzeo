@@ -12,6 +12,7 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.map cimport map as cmap
 from libcpp.set cimport set as cset
+from libcpp cimport bool as cpp_bool
 
 #=============================================================================
 # geometry
@@ -83,9 +84,9 @@ cdef extern from "../channel.h":
 
 cdef extern from "../channel.h" namespace "CHANNEL":
     cdef c_findChannelsInDijkstraNet "CHANNEL::findChannels"(DIJKSTRA_NETWORK*, 
-            vector[bool] *, vector[CHANNEL] *)
+            vector[cpp_bool] *, vector[CHANNEL] *)
     cdef c_findChannelsInVorNet "CHANNEL::findChannels"(VORONOI_NETWORK*, double, 
-            vector[bool] *, vector[CHANNEL] *)
+            vector[cpp_bool] *, vector[CHANNEL] *)
 
 cdef class Channel:
     cdef CHANNEL* thisptr
