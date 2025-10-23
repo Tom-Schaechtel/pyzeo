@@ -421,6 +421,16 @@ cdef class Atom:
             print("This value is not supposed to be modified")
             self.thisptr.radius = radius
 
+    @property  
+    def type(self):  
+        """Returns the atom type as a string."""  
+        return self.thisptr.type.decode('utf-8')  
+      
+    @type.setter  
+    def type(self, str value):  
+        """Sets the atom type."""  
+        self.thisptr.type = value.encode('utf-8')
+
 
 cdef class AtomNetwork:
     """
