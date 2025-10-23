@@ -180,15 +180,8 @@ cdef class Channel:
         for bvcell in bvcells:  
             c_bvcells.push_back(bvcell.thisptr[0])
 
-        print(f"Number of bvcells: {c_bvcells.size()}")
-
-        # Debug: Check channel's idMappings size
-        print(f"DEBUG: Channel idMappings size: {self.thisptr.idMappings.size()}")
-
         if c_bvcells.size() > 0:  
-            print(f"DEBUG: First cell has {c_bvcells[0].getNumNodes()} nodes")
             if c_bvcells[0].getNumNodes() > 0:
-                print(f"DEBUG: First node ID in first cell: {c_bvcells[0].getNodeID(0)}")
         
         # Prepare output vector  
         cdef vector[int] atom_ids  
@@ -235,12 +228,9 @@ def find_channels(VoronoiNetwork vornet, double channel_radius):
     # Convert C++ vector<CHANNEL> to Python list of Channel objects  
     py_channels = []  
     for i in range(c_channels.size()):  
-        # Debug: Check idMappings BEFORE copying
-        print(f"DEBUG: C++ channel {i} has {c_channels[i].idMappings.size()} id mappings")
         channel = Channel()
-        # Copy the C++ CHANNEL data  
+        # Copy the C++ CHANNEL data
         channel.thisptr[0] = c_channels[i]
-        print(f"DEBUG: Python channel {i} has {channel.thisptr.idMappings.size()} id mappings")
         py_channels.append(channel)  
       
     return py_channels, py_access_info
