@@ -179,9 +179,6 @@ cdef class Channel:
         cdef BasicVCell bvcell  
         for bvcell in bvcells:  
             c_bvcells.push_back(bvcell.thisptr[0])
-
-        if c_bvcells.size() > 0:  
-            if c_bvcells[0].getNumNodes() > 0:
         
         # Prepare output vector  
         cdef vector[int] atom_ids  
