@@ -146,7 +146,7 @@ cdef extern from "../networkstorage.h":
         ATOM() except +
         double x, y, z
         double radius
-        #string type
+        string type
         #int specialID
         double mass
         double charge 
