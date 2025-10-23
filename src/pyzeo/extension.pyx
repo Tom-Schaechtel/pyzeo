@@ -214,7 +214,7 @@ def find_channels(VoronoiNetwork vornet, double channel_radius):
     cdef vector[CHANNEL] c_channels  
       
     # Call the C++ static method  
-    c_findChannelsInVorNet(vornet.thisptr, min_radius, &access_info, &c_channels)  
+    c_findChannelsInVorNet(vornet.thisptr, channel_radius, &access_info, &c_channels)  
       
     # Convert C++ vector<bool> to Python list  
     py_access_info = [access_info[i] for i in range(access_info.size())]  
