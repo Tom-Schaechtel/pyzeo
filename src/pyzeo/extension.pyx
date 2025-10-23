@@ -182,12 +182,12 @@ cdef class Channel:
 
         print(f"Number of bvcells: {c_bvcells.size()}")
 
-        # Debug: Check channel's idMappings size  
+        # Debug: Check channel's idMappings size
         print(f"DEBUG: Channel idMappings size: {self.thisptr.idMappings.size()}")
 
-         if c_bvcells.size() > 0:  
+        if c_bvcells.size() > 0:  
             print(f"DEBUG: First cell has {c_bvcells[0].getNumNodes()} nodes")
-            if c_bvcells[0].getNumNodes() > 0:  
+            if c_bvcells[0].getNumNodes() > 0:
                 print(f"DEBUG: First node ID in first cell: {c_bvcells[0].getNodeID(0)}")
         
         # Prepare output vector  
