@@ -210,7 +210,7 @@ def find_channels(VoronoiNetwork vornet, double channel_radius):
         - access_info: Boolean list where access_info[i] indicates if node i is accessible  
     """  
     # Create C++ vectors to store results  
-    cdef vector[bint] access_info  
+    cdef vector[bool] access_info  
     cdef vector[CHANNEL] c_channels  
       
     # Call the C++ static method  
