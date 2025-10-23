@@ -178,14 +178,18 @@ cdef class Channel:
         cdef vector[BASIC_VCELL] c_bvcells  
         cdef BasicVCell bvcell  
         for bvcell in bvcells:  
-            c_bvcells.push_back(bvcell.thisptr[0])  
-          
+            c_bvcells.push_back(bvcell.thisptr[0])
+
+        print(f"Number of bvcells: {c_bvcells.size()}")
+
         # Prepare output vector  
         cdef vector[int] atom_ids  
           
         # Call C++ method  
-        self.thisptr.findBoundingAtoms(atmnet.thisptr, c_bvcells, atom_ids)  
-          
+        self.thisptr.findBoundingAtoms(atmnet.thisptr, c_bvcells, atom_ids)
+
+        print(f"Number of atom_ids found: {atom_ids.size()}")
+
         # Convert C++ vector to Python list  
         return [atom_ids[i] for i in range(atom_ids.size())]
 
