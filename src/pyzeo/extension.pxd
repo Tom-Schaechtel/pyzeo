@@ -22,6 +22,7 @@ cdef extern from "../geometry.h":
         void scale (const double sc, XYZ*) 
 
     cdef cppclass CPoint "Point":
+        CPoint() except +
         CPoint(double, double, double) except +
         double vals[3]
         CPoint scale (const double) const
