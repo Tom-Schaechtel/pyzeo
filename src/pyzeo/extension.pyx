@@ -6,6 +6,7 @@
 import sys
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+from libcpp cimport bool as cpp_bool 
 from cython.operator cimport dereference as deref, preincrement as inc
 cimport pyzeo.extension
 
@@ -210,7 +211,7 @@ def find_channels(VoronoiNetwork vornet, double channel_radius):
         - access_info: Boolean list where access_info[i] indicates if node i is accessible  
     """  
     # Create C++ vectors to store results  
-    cdef vector[bool] access_info  
+    cdef vector[cpp_bool] access_info  
     cdef vector[CHANNEL] c_channels  
       
     # Call the C++ static method  
