@@ -51,9 +51,11 @@ def test_find_bounding_atoms():
           
         # Print atom details for the first few bounding atoms  
         for atom_id in atom_ids[:3]:  # Show first 3 atoms  
-            atom = atmnet.atoms[atom_id]  
+            atom = atmnet.atoms[atom_id]
+            coords = atom.coords  
+
             print(f"    Atom {atom_id}: type={atom.type}, "  
-                  f"coords=({atom.x:.3f}, {atom.y:.3f}, {atom.z:.3f})")  
+                  f"coords=({coords[0]:.3f}, {coords[1]:.3f}, {coords[2]:.3f})")  
       
     print("\nTest completed successfully!")
   
