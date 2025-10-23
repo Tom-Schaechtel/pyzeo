@@ -447,6 +447,11 @@ cdef class AtomNetwork:
         newatmnet.rad_flag = self.rad_flag
         return newatmnet
 
+    @property  
+    def no_atoms(self):  
+        """Returns the number of atoms in the network."""  
+        return self.thisptr.numAtoms
+    
     #def relative_to_absolute(self, point):
     #    cdef CPoint* cpoint_ptr = (<Point?>point).thisptr
     #    cdef double x = cpoint_ptr.vals[0]
