@@ -158,35 +158,35 @@ cdef class Channel:
         del self.thisptr
 
     def find_bounding_atoms(self, AtomNetwork atmnet, list bvcells):  
-    """  
-    Find atoms that bound this channel.  
-      
-    Parameters  
-    ----------  
-    atmnet : AtomNetwork  
-        The atom network structure  
-    bvcells : list of BasicVCell  
-        Vector of Voronoi cells (one per atom)  
+        """  
+        Find atoms that bound this channel.  
           
-    Returns  
-    -------  
-    list of int  
-        Indices of atoms that bound this channel  
-    """  
-    # Convert Python list of BasicVCell to C++ vector  
-    cdef vector[BASIC_VCELL] c_bvcells  
-    cdef BasicVCell bvcell  
-    for bvcell in bvcells:  
-        c_bvcells.push_back(bvcell.thisptr[0])  
-      
-    # Prepare output vector  
-    cdef vector[int] atom_ids  
-      
-    # Call C++ method  
-    self.thisptr.findBoundingAtoms(atmnet.thisptr, c_bvcells, atom_ids)  
-      
-    # Convert C++ vector to Python list  
-    return [atom_ids[i] for i in range(atom_ids.size())]
+        Parameters  
+        ----------  
+        atmnet : AtomNetwork  
+            The atom network structure  
+        bvcells : list of BasicVCell  
+            Vector of Voronoi cells (one per atom)  
+              
+        Returns  
+        -------  
+        list of int  
+            Indices of atoms that bound this channel  
+        """  
+        # Convert Python list of BasicVCell to C++ vector  
+        cdef vector[BASIC_VCELL] c_bvcells  
+        cdef BasicVCell bvcell  
+        for bvcell in bvcells:  
+            c_bvcells.push_back(bvcell.thisptr[0])  
+          
+        # Prepare output vector  
+        cdef vector[int] atom_ids  
+          
+        # Call C++ method  
+        self.thisptr.findBoundingAtoms(atmnet.thisptr, c_bvcells, atom_ids)  
+          
+        # Convert C++ vector to Python list  
+        return [atom_ids[i] for i in range(atom_ids.size())]
 
 
 def find_channels(VoronoiNetwork vornet, double channel_radius):  
