@@ -83,9 +83,9 @@ cdef extern from "../channel.h":
 
 cdef extern from "../channel.h" namespace "CHANNEL":
     cdef c_findChannelsInDijkstraNet "CHANNEL::findChannels"(DIJKSTRA_NETWORK*, 
-            vector[bint] *, vector[CHANNEL] *)
+            vector[bool] *, vector[CHANNEL] *)
     cdef c_findChannelsInVorNet "CHANNEL::findChannels"(VORONOI_NETWORK*, double, 
-            vector[bint] *, vector[CHANNEL] *)
+            vector[bool] *, vector[CHANNEL] *)
 
 cdef class Channel:
     cdef CHANNEL* thisptr
