@@ -450,7 +450,7 @@ cdef class AtomNetwork:
     @property  
     def no_atoms(self):  
         """Returns the number of atoms in the network."""  
-        return self.thisptr.numAtoms
+        return self.thisptr.no_atoms
     
     #def relative_to_absolute(self, point):
     #    cdef CPoint* cpoint_ptr = (<Point?>point).thisptr
