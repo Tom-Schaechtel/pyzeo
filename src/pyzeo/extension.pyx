@@ -235,7 +235,9 @@ def find_channels(VoronoiNetwork vornet, double channel_radius):
     # Convert C++ vector<CHANNEL> to Python list of Channel objects  
     py_channels = []  
     for i in range(c_channels.size()):  
-        channel = Channel()  
+        # Debug: Check idMappings BEFORE copying
+        print(f"DEBUG: C++ channel {i} has {c_channels[i].idMappings.size()} id mappings")
+        channel = Channel()
         # Copy the C++ CHANNEL data  
         channel.thisptr[0] = c_channels[i]
         print(f"DEBUG: Python channel {i} has {channel.thisptr.idMappings.size()} id mappings")
