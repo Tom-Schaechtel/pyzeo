@@ -456,7 +456,7 @@ cdef class AtomNetwork:
     def atoms(self):  
         """Returns a list of Atom objects in the network."""  
         atom_list = []  
-        for i in range(self.thisptr.numAtoms):  
+        for i in range(self.thisptr.no_atoms):  
             atom = Atom()  
             atom.thisptr[0] = self.thisptr.atoms[i]  
             atom_list.append(atom)  
