@@ -80,7 +80,7 @@ cdef extern from "../networkinfo.h":
 cdef extern from "../channel.h":
     cdef cppclass CHANNEL:
         CHANNEL() except +
-        void findBoundingAtoms(ATOM_NETWORK*, vector[BASIC_VCELL]*, vector[int]*)
+        void findBoundingAtoms(ATOM_NETWORK*, vector[BASIC_VCELL], vector[int])
 
 cdef extern from "../channel.h" namespace "CHANNEL":
     cdef void c_findChannelsInDijkstraNet "CHANNEL::findChannels"(DIJKSTRA_NETWORK*, 
