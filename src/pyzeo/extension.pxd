@@ -81,6 +81,7 @@ cdef extern from "../channel.h":
     cdef cppclass CHANNEL:
         CHANNEL() except +
         cmap[int, int] idMappings
+        cmap[int, int] reverseIDMappings
         void findBoundingAtoms(ATOM_NETWORK*, vector[BASIC_VCELL], vector[int])
 
 cdef extern from "../channel.h" namespace "CHANNEL":
