@@ -184,7 +184,7 @@ cdef class Channel:
         cdef vector[int] atom_ids  
           
         # Call C++ method  
-        self.thisptr.findBoundingAtoms(atmnet.thisptr, &c_bvcells, &atom_ids)  
+        self.thisptr.findBoundingAtoms(atmnet.thisptr, c_bvcells, atom_ids)  
           
         # Convert C++ vector to Python list  
         return [atom_ids[i] for i in range(atom_ids.size())]
