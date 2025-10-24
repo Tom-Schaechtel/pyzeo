@@ -35,6 +35,11 @@ def test_find_bounding_atoms():
     print(f"Found {len(channels)} channels in the structure")  
     print(f"Accessibility info for {len(access_info)} nodes")
 
+    import numpy as np
+    num_accessible = len(np.array(access_info)[np.array(access_info) == True])
+
+    print(f"Number of accessible nodes {num_accessible}")
+
     # Test find_bounding_atoms for each channel  
     for i, channel in enumerate(channels):  
         # Call the find_bounding_atoms method  
