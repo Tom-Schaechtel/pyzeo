@@ -6,6 +6,7 @@
 import sys
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+from libcpp cimport bool as cpp_bool 
 from cython.operator cimport dereference as deref, preincrement as inc
 cimport pyzeo.extension
 
@@ -156,6 +157,78 @@ cdef class Channel:
         self.thisptr = new CHANNEL()
     def __dealloc__(self):
         del self.thisptr
+
+    def find_bounding_atoms(self, AtomNetwork atmnet, list bvcells):  
+        """  
+        Find atoms that bound this channel.  
+          
+        Parameters  
+        ----------  
+        atmnet : AtomNetwork  
+            The atom network structure  
+        bvcells : list of BasicVCell  
+            Vector of Voronoi cells (one per atom)  
+              
+        Returns  
+        -------  
+        list of int  
+            Indices of atoms that bound this channel  
+        """  
+        # Convert Python list of BasicVCell to C++ vector  
+        cdef vector[BASIC_VCELL] c_bvcells  
+        cdef BasicVCell bvcell  
+        for bvcell in bvcells:  
+            c_bvcells.push_back(bvcell.thisptr[0])
+        
+        # Prepare output vector  
+        cdef vector[int] atom_ids  
+          
+        # Call C++ method  
+        self.thisptr.findBoundingAtoms(atmnet.thisptr, c_bvcells, atom_ids)
+
+        # Convert C++ vector to Python list  
+        return [atom_ids[i] for i in range(atom_ids.size())]
+
+
+def find_channels(VoronoiNetwork vornet, double channel_radius):  
+    """  
+    Find channels in a Voronoi network.  
+      
+    Identifies channels (accessible pore networks) within the provided   
+    VORONOI_NETWORK for a given probe radius.  
+      
+    Parameters  
+    ----------  
+    vornet : VoronoiNetwork  
+        The Voronoi network to analyze  
+    channel_radius : float
+        Radius of probe used to determine the accessibility of void space.  
+          
+    Returns  
+    -------  
+    tuple of (list of Channel, list of bool)  
+        - channels: List of Channel objects representing accessible channels  
+        - access_info: Boolean list where access_info[i] indicates if node i is accessible  
+    """  
+    # Create C++ vectors to store results  
+    cdef vector[cpp_bool] access_info  
+    cdef vector[CHANNEL] c_channels  
+      
+    # Call the C++ static method  
+    c_findChannelsInVorNet(vornet.thisptr, channel_radius, &access_info, &c_channels)  
+      
+    # Convert C++ vector<bool> to Python list  
+    py_access_info = [access_info[i] for i in range(access_info.size())]  
+      
+    # Convert C++ vector<CHANNEL> to Python list of Channel objects  
+    py_channels = []  
+    for i in range(c_channels.size()):  
+        channel = Channel()
+        # Copy the C++ CHANNEL data
+        channel.thisptr[0] = c_channels[i]
+        py_channels.append(channel)  
+      
+    return py_channels, py_access_info
 
 #=============================================================================
 # psd
@@ -329,7 +402,7 @@ cdef class Atom:
 
     property coords:
         def __get__(self):
-            coords = list(self.thisptr.x, self.thisptr.y, self.thisptr.z)
+            coords = [self.thisptr.x, self.thisptr.y, self.thisptr.z]
             return coords
         def __set__(self, coords):      # Don't set this
             """
@@ -345,6 +418,16 @@ cdef class Atom:
         def __set__(self, radius): 
             print("This value is not supposed to be modified")
             self.thisptr.radius = radius
+
+    @property  
+    def type(self):  
+        """Returns the atom type as a string."""  
+        return self.thisptr.type.decode('utf-8')  
+      
+    @type.setter  
+    def type(self, str value):  
+        """Sets the atom type."""  
+        self.thisptr.type = value.encode('utf-8')
 
 
 cdef class AtomNetwork:
@@ -372,6 +455,21 @@ cdef class AtomNetwork:
         newatmnet.rad_flag = self.rad_flag
         return newatmnet
 
+    @property  
+    def no_atoms(self):  
+        """Returns the number of atoms in the network."""  
+        return self.thisptr.no_atoms
+
+    @property  
+    def atoms(self):  
+        """Returns a list of Atom objects in the network."""  
+        atom_list = []  
+        for i in range(self.thisptr.no_atoms):  
+            atom = Atom()  
+            atom.thisptr[0] = self.thisptr.atoms[i]  
+            atom_list.append(atom)  
+        return atom_list
+    
     #def relative_to_absolute(self, point):
     #    cdef CPoint* cpoint_ptr = (<Point?>point).thisptr
     #    cdef double x = cpoint_ptr.vals[0]
@@ -660,7 +758,8 @@ cdef class AtomNetwork:
         vornet_ptr = (<VoronoiNetwork?>vornet).thisptr
         calculateFreeSphereParameters(vornet_ptr, c_fname, False)
 
-    def perform_voronoi_decomposition(self, saveVorCells=True):
+    def perform_voronoi_decomposition(self, saveVorCells=True,
+                                     returnbvcells=False):
         """
         Performs weighted voronoi decomposition of atoms in the AtomNetwork 
         to analyze void space and generate voronoi nodes, edges and faces.
@@ -668,6 +767,7 @@ cdef class AtomNetwork:
             saveVorCells (optional): 
                 Flag to denote whether to save the VorCells.
                 Reserved for future use, so ignore this.
+            return
         Returns:
             Instance of VoronoiNetwork
         """
@@ -747,7 +847,22 @@ cdef class AtomNetwork:
             #basicvcell = BasicVCell()
             #basicvcell.thisptr = &(bvcells[i])
             #bvcelllist.append(bvcells[i])
-        return vornet, edge_centers, fcs
+
+        if returnbvcells:
+
+            # Create BasicVCell list from bvcells vector  
+            bvcelllist = []  
+            for i in range(bvcells.size()):
+                basicvcell = BasicVCell()  
+                # Copy the C++ BASIC_VCELL data  
+                basicvcell.thisptr[0] = bvcells[i]  
+                bvcelllist.append(basicvcell)
+            
+            return vornet, edge_centers, fcs, bvcelllist  
+        
+        else:  
+            
+            return vornet, edge_centers, fcs
 
 
 cdef class VoronoiNode:
@@ -984,7 +1099,24 @@ cdef class BasicVCell:
         pass
 
     def __dealloc__(self):
-        del self.thisptr 
+        del self.thisptr
+
+    def get_num_nodes(self):  
+        """Returns the number of nodes in this Voronoi cell."""  
+        return self.thisptr.getNumNodes()  
+      
+    def get_node_coord(self, int index):  
+        """Returns the coordinates of the node at the given index as a Point."""  
+        cdef CPoint coord = self.thisptr.getNodeCoord(index)  
+        return Point(coord.vals[0], coord.vals[1], coord.vals[2])  
+      
+    def get_node_id(self, int index):  
+        """Returns the node ID at the given index."""  
+        return self.thisptr.getNodeID(index)  
+      
+    property num_nodes:  
+        def __get__(self):  
+            return self.thisptr.getNumNodes()
 
 #=============================================================================
 # cycle

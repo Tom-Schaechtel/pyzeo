@@ -12,6 +12,7 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.map cimport map as cmap
 from libcpp.set cimport set as cset
+from libcpp cimport bool as cpp_bool
 
 #=============================================================================
 # geometry
@@ -22,6 +23,7 @@ cdef extern from "../geometry.h":
         void scale (const double sc, XYZ*) 
 
     cdef cppclass CPoint "Point":
+        CPoint() except +
         CPoint(double, double, double) except +
         double vals[3]
         CPoint scale (const double) const
@@ -78,12 +80,15 @@ cdef extern from "../networkinfo.h":
 cdef extern from "../channel.h":
     cdef cppclass CHANNEL:
         CHANNEL() except +
+        cmap[int, int] idMappings
+        cmap[int, int] reverseIDMappings
+        void findBoundingAtoms(ATOM_NETWORK*, vector[BASIC_VCELL], vector[int])
 
 cdef extern from "../channel.h" namespace "CHANNEL":
-    cdef c_findChannelsInDijkstraNet "findChannels"(DIJKSTRA_NETWORK*, 
-            vector[bint] *, vector[CHANNEL] *)
-    cdef c_findChannelsInVorNet "findChannels"(VORONOI_NETWORK*, double, 
-            vector[bint] *, vector[CHANNEL] *)
+    cdef void c_findChannelsInDijkstraNet "CHANNEL::findChannels"(DIJKSTRA_NETWORK*, 
+            vector[cpp_bool] *, vector[CHANNEL] *)
+    cdef void c_findChannelsInVorNet "CHANNEL::findChannels"(VORONOI_NETWORK*, double, 
+            vector[cpp_bool] *, vector[CHANNEL] *)
 
 cdef class Channel:
     cdef CHANNEL* thisptr
@@ -141,7 +146,7 @@ cdef extern from "../networkstorage.h":
         ATOM() except +
         double x, y, z
         double radius
-        #string type
+        string type
         #int specialID
         double mass
         double charge 
@@ -284,6 +289,9 @@ cdef extern from "../voronoicell.h":
 
     cdef cppclass BASIC_VCELL:
         BASIC_VCELL() except +
+        int getNumNodes()
+        CPoint getNodeCoord(int index)
+        int getNodeID(int index)
 
 
 cdef class VorFace:
