@@ -404,7 +404,7 @@ cdef class Atom:
 
     property coords:
         def __get__(self):
-            coords = list(self.thisptr.x, self.thisptr.y, self.thisptr.z)
+            coords = [self.thisptr.x, self.thisptr.y, self.thisptr.z]
             return coords
         def __set__(self, coords):      # Don't set this
             """
