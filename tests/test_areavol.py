@@ -2,7 +2,8 @@ def test_areavol():
     from pyzeo.netstorage import AtomNetwork
     from pyzeo.area_volume import volume, surface_area
 
-    atmnet = AtomNetwork.read_from_CSSR("MgO_vac1.cssr", rad_file="MgO.rad")
+    #atmnet = AtomNetwork.read_from_CSSR("MgO_vac1.cssr", rad_file="MgO.rad")
+    atmnet = AtomNetwork.read_from_CSSR("MgO_vac1.cssr")
     vol_str = volume(atmnet, 0.1, 0.05, 20000)
     lines = vol_str.decode("utf-8").split('\n')
     for line in lines:
@@ -10,7 +11,8 @@ def test_areavol():
             print('---------')
             print(line)
             print('---------')
-    vol_str, ha_atmnet = volume(atmnet, 0.1, 0.05, 7000, True)
+    #vol_str, ha_atmnet = volume(atmnet, 0.1, 0.05, 7000, True)
+    vol_str = volume(atmnet, 0.1, 0.05, 7000)
     lines = vol_str.decode("utf-8").split('\n')
     for line in lines:
         if "Number_of_pockets" in line:
