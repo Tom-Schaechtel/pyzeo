@@ -35,6 +35,7 @@ Source = "https://github.com/nomad-coe/pyzeo"
 [project.optional-dependencies]
 dev = [
     "pytest",
+    "pytest-forked"
 ]
 
 [tool.setuptools.package-dir]
